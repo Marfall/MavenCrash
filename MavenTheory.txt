@@ -1,0 +1,47 @@
+Maven  под Windows:
+
+- CP - Edit system environment variables: 
+    1) new , name JAVA_HOME  - jdk_path
+    2) Path - edit - new  - maven_path\bin 
+    3) cmd -   mvn --version
+
+MAC OS: 
+    brew install maven  (Need homebrew)
+    или
+    check environment variable value:
+
+    echo %JAVA_HOME
+    /Library/Java/JavaVirtualMachines/jdk1.8.0_45/Contents/
+
+    Adding to PATH:
+    export PATH=/opt/apache-maven-3..0/bin:$PATH
+
+LINUX:
+
+    sudo apt install maven
+    export PATH=/usr/lib/jvm/java-1.11.0-openjdk-amd64/bin:$PATH
+    export JAVA_HOME=/usr/lib/jvm/java-1.11.0-openjdk-amd64
+    echo $JAVA_HOME
+
+MAVEN CONSOLE APPLICATION:
+
+ - mvn archetype:generate - заготовка, генарация maven-проекта(stub-project)
+
+ tree - структура в виде дерева
+
+ mvn compile - компиляция проекта (из коревой папки проекта) - создаст папку target,
+              в которой будут уже скопилированные классы
+
+ mvn test    - запуск тестов из maven, а также в папке surefire-reports даст результаты тестов
+
+ mvn paсkage - создаст JAR в корне target
+
+ java -cp target/lessons-1.0-SNAPSHOT.jar com.max.App     - запуск (файл JAR + Main-class)
+
+ Convention Over Configuration - все уже сконфигурировано, maven сам знает где и что лежит
+
+ Архетип - заготовленное решение,от которого можно наследоваться
+
+ GroupId - название компании (com.google)
+
+ ArtifactId - название проекта
