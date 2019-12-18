@@ -60,8 +60,138 @@ MAVEN - на самом деле просто парсит XML и передае
 
     mvn compiler: compile  - берет все файлы из папки java, компилирует их и кладет в target
 
+    mvn help:describe -Dplugin=help  - запуск плагина help c целью describe  и в него передаем параметр с именем plugin
+                                   Цель при запуске попробует найти параметр с именем help. Когда найдет,
+                                   возьмет всю документацию по нему и выведет с именем всех целей,  которые есть в 
+                                   этом плагине.
+
+    mvn helo:help
+    mvn help:system                - запуск целей
+    mvn:all-profiles
+
+    mvn help:describe -Dplugin=compiler -Dgoal=compile -Ddetail
+        - описание плагина  compiler  и его конкретной цели  compile,  с полным описанием цели
+
+    
+    ЖИЗНЕННЫЙ ЦИКЛ СБОРКИ:
+
+    Основные:
+
+    -clean
+    -default
+    -site 
+
+    mvn recorces:resources - скопирует файлы из ресурсов в  target/classes
+
+    mvn clean   -  удалит  target
+
+    surfare -  плагин для тестов
+
+    mvn resources:resources compiler:compile   -  скомпилировать и скопировать ресурсы 
+
+    Lifecycle -  набор плагинов, запускаемых друг за другом для того чтобы выполнить какие-то действия кратко.
+                 По сути,  это быстрые команды, чтобы не писатть вызовы плагинов и целей.
+
+    CLEAN:  
+
+        -   mvn clean:clean - удаляет папку  target, стадии, каждая из которых прикручена на определенный плагин:
+
+                -pre-clean
+                -clean
+                -post-clean   (можно в pom-нике прикрутить какую-то логику)
+
+    DEFAULT LIFECYCLE:
+
+        (при запуске какой-то из стадий,  обязательно запустятся все предыдущие)
+
+        deploy -  возможность деплоя на какой-либо сервер
+
+        site -  отдельная стадия,  делает документацию.
+
+        test - можно отключить (skip-tests mode)
 
 
+    POM.XML     - Project Object Model
+
+        - Собственные  pom  наследуются от super-pom,  поэтому все настройки уже сконфигурированы, 
+          но их можно переопределять.  
+
+        - Переопределение настроек на  resources:
+
+            <build>
+                <resources>
+                    <directory>
+                        ${project.basedir}/src/main/customdir      //папка с ресурсами переопределена
+                    </directory>
+                </resources>
+            </build>
+
+    EFFECTIVE POM - смесь суперпома и собственного - список абсолютно всех настроек:
+
+         - mvn help:effective-pom        //  покажет его
 
 
+    
+    MAVEN PROPERTIES:
 
+    ${} -  вставить не-хардкод значение
+
+        <version>${project.groupId}-beta</version>   в pom.properties - после  package
+
+        Также сюда можно пописывать переменные среды:
+
+            export hello=world
+            echo $hello             
+
+       После этого ее можно вставить - <version>${hello}</version>    
+
+       <version>${env.JAVA_HOME}</version>    // обратиться к переменной среды
+
+       Также можно использовать ${settings.*}   -  из файла  settings.XML
+
+       Собственные  properties:
+
+       <properties>
+            <myVersion>1.2</myVersion>
+       </properties>
+ 
+        
+    НАСТРОЙКА  ИНФОРМАЦИИ О ПРОЕКТЕ:
+
+        - есть настройки чисто описательные - ничего не делают, на процесс
+          билда и сборки никак не влияют:
+
+            <name>lessons</name>
+            <url>youtube.com</url>
+            <licenses>
+                <name>some name</name>
+                <url>example</url>
+                <distribution>repo</distribution>
+                <comments>some comment</comments>
+            </licenses>
+
+            <organization>
+                <url>apache.com</url>
+                <name>apache</name>
+            </organization>
+
+            <developers>
+                <developer>
+                    <name>Max</name>
+                    <url>example.com</url>
+                    <timezone>-3</timezone>
+                    <email>example@mail.com</email>
+                    <roles>
+                        <role>
+                            developer
+                        </role>
+                    </roles>
+                    <id></id>
+                </developer>
+            </developers>
+
+
+    DEPENDENCIES:
+
+
+        
