@@ -126,7 +126,7 @@ MAVEN - на самом деле просто парсит XML и передае
                 </resources>
             </build>
 
-    EFFECTIVE POM - смесь суперпома и собственного - список абсолютно всех настроек:
+    EFFECTIVE POM - смесь super-pom и application - список абсолютно всех настроек:
 
          - mvn help:effective-pom        //  покажет его
 
@@ -193,5 +193,34 @@ MAVEN - на самом деле просто парсит XML и передае
 
     DEPENDENCIES:
 
+        - качает блиблиотеки со своих репозиториев
+        - есть 4-й параметр packaging, по умолчанию  jar, можно менять на  war,zip,pom
 
-        
+        /home/user/.m2 - здесь лежат все скачанные библиотеки (скрыта)
+
+
+    DEPENDENCY SCOPE:
+
+        -cp    -  ключ-classpath
+
+         Синтаксис команды запуска JAR c  консоли:
+
+         java -cp <target/JAR-name> <main-class-name>  - с  project-root target/jar-name 
+
+         //ex:
+
+         java -cp target/MvnProject-1.7.jar Main
+
+    Если какие-то dependencies  нужны только на стадии компиляции,  а какие-то только 
+    на запуске,  то для этого существует параметр SCOPE:
+
+    <scope>compile</scope>  - default - подключена на всех этапах
+
+    scope - provided -  только на этапе компиляции,  при запуске не используется (в runtime  не достать)
+
+    scope - runtime -  наоборот,  только в рантайме
+
+    scope - test  -  подключает даную библиотеку только для тестирования
+
+
+
