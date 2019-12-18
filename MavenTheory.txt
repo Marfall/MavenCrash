@@ -38,6 +38,8 @@ MAVEN CONSOLE APPLICATION:
 
  java -cp target/lessons-1.0-SNAPSHOT.jar com.max.App     - запуск (файл JAR + Main-class)
 
+ java -cp target/MvnProject-1.0-SNAPSHOT.jar  Main   - сборка с Idea
+
  Convention Over Configuration - все уже сконфигурировано, maven сам знает где и что лежит
 
  Архетип - заготовленное решение,от которого можно наследоваться
@@ -45,3 +47,8 @@ MAVEN CONSOLE APPLICATION:
  GroupId - название компании (com.google)
 
  ArtifactId - название проекта
+
+
+PLUGINS AND GOALS:
+
+
