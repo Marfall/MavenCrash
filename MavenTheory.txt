@@ -362,8 +362,133 @@ MAVEN - на самом деле просто парсит XML и передае
 
     EXEC PLUGIN
 
-        
+        - позволяет запускать код через  Maven.
+
+        1) mvn clean package
+
+        2) mvn exec:java -Dexec.mainClass=Main  - запуск 
+
+
+    JETTY PLUGIN:
+
+        - Позволяет запускать WEB- приложения (war с помощью плагина без  Tomcat)
+
+        - Добавляем <packaging>war</packaging>
+
+        - Добавляем плагин:
+
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.eclipse.jetty</groupId>
+                        <artifactId>jetty-maven-plugin</artifactId>
+                        <version>9.4.6.v20170531</version>
+                    </plugin>
+                </plugins>
+            </build>
+
+    
+    MAVEN PROFILES:
+
+        - Может быть несколько профилей, в которых делаются разные настройки:
+
+        <profiles>
+            <profile>
+                <id>dev</id>
+                <build>
+                    <resources>
+                        <resource>
+                            <directory>${baseDir}/src/main/mn</directory>
+                        </resource>
+                    </resources>
+                </build>
+            </profile>
+            <profile>
+                <id>prod</id>
+                <build>
+                    <resources>
+                        <resource>
+                            <directory>${baseDir}/src/main/newRes</directory>
+                        </resource>
+                    </resources>
+                </build>
+            </profile>
+        </profiles>
+
+
+    => Можно запустить все это под конкретным  profile
+
+     mvn clean package -Pdev    -  собрать приложение под профилем "dev"
+
+    - Аналогичный вариант с внешним файлом profiles.xml - в корне проекта:
+
+    <profilesXml xmlns="http://maven.apache.org/PROFILES/1.0.0">
+        <profiles>
+            <profile>
+                <id>test</id>
+            </profile>
+        </profiles>
+    </profilesXml>
+
+
+    ВЕРСИОНИРОВАНИЕ ИЗ ПОД ОПРЕДЕЛЕННОГО PROFILE (PROPERTIES):
+
+    - здесь под профилем dev будет подставлен "qwe" - version
+
+    - Вариант использования такой схемы - подстановка паролей - прописать в  properties,
+    а потом тянуть
+
+     <groupId>org.example</groupId>
+    <artifactId>profiletest</artifactId>
+    <version>1.0-SNAPSHOT-${myversion}</version>
+
+
+    <profiles>
+        <profile>
+            <id>dev</id>
+            <properties>
+                <myversion>qwe</myversion>
+            </properties>
+            <build>
+                <resources>
+                    <resource>
+                        <directory>${baseDir}/src/main/mn</directory>
+                    </resource>
+                </resources>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-compiler-plugin</artifactId>
+                        <configuration>
+                            <source>11</source>
+                            <target>11</target>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.eclipse.jetty</groupId>
+                        <artifactId>jetty-maven-plugin</artifactId>
+                        <version>9.4.6.v20170531</version>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+
+ПАРАМЕТР  ACTIVATION:
+
+    <activation>
+        <jdk>1.8</jdk>
+    </activation>
+ 
+    - здесь, если JDK 1.8 -  то он будет запущен
+
+    <activeByDefault>true</activeByDefault>   // активация  профиля по умолчанию
+
+    <os><family>unix</family></os>            //  по операционной системе (если *nix -  то  default)
 
 
 
+    ФИЛЬТРАЦИЯ РЕСУРСОВ:
 
+
+    

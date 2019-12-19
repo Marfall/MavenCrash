@@ -1,0 +1,11 @@
+<profilesXml xmlns="http://maven.apache.org/PROFILES/1.0.0">
+    <profiles>
+        <profile>
+            <id>test</id>
+            <properties>
+                <myversion>qwe</myversion>
+            </properties>
+        </profile>
+    </profiles>
+
+</profilesXml>
