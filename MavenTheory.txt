@@ -220,7 +220,150 @@ MAVEN - на самом деле просто парсит XML и передае
 
     scope - runtime -  наоборот,  только в рантайме
 
-    scope - test  -  подключает даную библиотеку только для тестирования
+    scope - system -    аналог  provided - только модно еще указать <systemPath> -  где лежит  JAR
+
+    scope - test  -  подключает данную библиотеку только для тестирования
+
+    scope - import -  можно подключить другую библиотеку, которая будет не  JAR, а POM 
+
+    Сущетвует заблуждение,  что если используется  compile ,  то  log4j  окажется  в  JAR, это Не так.
+    В  WAR  окажется.
+
+    Плагин для автосбор зависимостей в JAR:
+
+         <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>2.3</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <shadedArtifactAttached>true</shadedArtifactAttached>
+                            <transformers>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.XmlAppendingTransformer">
+                                </transformer>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+                                    <resource>META-INF/spring.handlers</resource>
+                                </transformer>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+                                    <resource>META-INF/spring.schemas</resource>
+                                </transformer>
+                            </transformers>
+                            <filters>
+                                <filter>
+                                    <artifact>*:*</artifact>
+                                    <excludes>
+                                        <exclude>META-INF/*.SF</exclude>
+                                        <exclude>META-INF/*.DSA</exclude>
+                                        <exclude>META-INF/*.RSA</exclude>
+                                    </excludes>
+                                </filter>
+                            </filters>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+
+
+    OPTIONAL DEPENDENCY:
+
+        - Когда есть необходимость не подключать  dependency  везде.
+          И нужно подгружать только конкретные  dependency.
+          <optional>true</optional>   -  нужно подключать вручную
+
+          => Во втором проекте:
+
+          <dependency>
+            <groupId>com.max</groupId>
+            <artifactId>lessons</artifactId>
+            <version>1.0-SNAPSHOT</version>
+          </dependency> 
+
+          => Во втором проекте  optional - dependence  нужно прописывать вручную
+
+
+    VERSON RANGE:
+
+        Промежутки версий <version>(1.2.10,1.2.12)</version>            
+
+            ()  -   не включительно
+            []  -   включительно
+
+
+    ТРАНЗИТИВНЫЕ DEPENDENCY:
+
+        - У каждой зависимости могут быть свои зависиости и они их могут скачивать.    
+          И те зависимости ,  на которые не тпряых ссылок называютя транзитивными.
+
+          mvn dependency:resolve   -  показать транзитивные зависимости
+          mvn dependency:tree   -  показать в виде дерева
+          mvn dependency:analyze -  анализ зависимостей (например, покажет ненужные)
+
+
+    ИСКЛЮЧЕНИЕ  ТРАНЗИТИВНЫХ DEPENDENCY:
+
+
+          <exclusions>
+            <exclusion>
+                <groupId>oro</groupId>           // приведет к отсутсвию зависимости
+                <artifactId>oro</artifactId>
+                <version>2.0.8</version>
+            </exclusion>
+          </exclusions>
+
+
+    МУЛЬТИМОДУЛЬНОСЬ, НАСЛЕДОВАНИЕ В MAVEN:
+
+        - позволяет разбивать проект на модули
+        - new - Module - (Inherit)  - выбираем от кого наследовать - будет parent-pom
+
+            => В главном pom-файле появляется 
+            
+            <modules>
+                <module>
+                    secondProject
+                </module>
+            </modules>
+
+        POM-наследник переопределяет только ArtifactId
+
+        mvn help:effective-pom  -    построить результирующий  pom для модуля
+
+        - Можно переопределять  build-процесс
+
+        - Каждый из этих модулей можно билдить отдельно 
+          (нет смысла пересобирать отдельные модули)
+
+        - parent  сбилдит сразу все
+
+
+    DEPENDENCY MANAGEMENT:
+
+        -  Например - если нужно, чтобы во всех модулях была одна  и та же
+           версия зависимости.
+
+           <dependencyManagenent>
+                <dependencies>
+                    <groupId>log4j</groupId>
+                    <artifactId>log4j</artifactId>
+                    <version>1.2.17</version>
+                </dependencies>
+           </dependencyManagenent>
+
+
+        - Теперь во всех модулях можно добавлять эту зависимость, не указывая версию,
+          она будет забираться из parent.
+
+
+    EXEC PLUGIN
+
+        
+
 
 
 

@@ -1,11 +1,14 @@
+import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 
 public class Main {
 
-    static final Logger logger = Logger.getLogger(Main.class);
+    public static  final Logger logger = Logger.getLogger(Main.class);
 
     public static void main(String[] args) {
-        logger.info("yo");
+
+        BasicConfigurator.configure();
+        logger.info("log this shit");
         System.out.println("Fuck this shit, I'm going to Narnia");
 
     }
